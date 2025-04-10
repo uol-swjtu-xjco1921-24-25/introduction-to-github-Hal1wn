@@ -79,6 +79,16 @@ class TestMazeGame(unittest.TestCase):
         )
         self.assertIn("Invalid maze configuration", result.stdout)
         self.assertNotEqual(result.returncode, 0)
-
+    def test_boundary_movement(self):
+        """测试玩家移动到地图外（使用复杂迷宫）"""
+        input_sequence = "a\na\na\nq\n"  # 强制向左越界
+        result = subprocess.run(
+            ["./maze", self.maze_files["complex"]],
+            input=input_sequence,
+            text=True,
+            capture_output=True
+        )
+        self.assertIn("out of bounds", result.stdout.lower())
+        self.assertLess(result.stdout.count("Moved to"), 3)
 if __name__ == "__main__":
     unittest.main()
