@@ -90,5 +90,16 @@ class TestMazeGame(unittest.TestCase):
         )
         self.assertIn("out of bounds", result.stdout.lower())
         self.assertLess(result.stdout.count("Moved to"), 3)
+    def test_case_insensitive_input(self):
+        """测试大小写混合输入（W/a/S）"""
+        input_sequence = "W\na\nS\nq\n"
+        result = subprocess.run(
+            ["./maze", self.maze_files["simple"]],
+            input=input_sequence,
+            text=True,
+            capture_output=True
+        )
+        self.assertEqual(result.stdout.count("Moved to"), 3)
+        self.assertIn("Invalid input", result.stdout)
 if __name__ == "__main__":
     unittest.main()
